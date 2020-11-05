@@ -78,9 +78,37 @@ const makePayment = async (req, res, next) => {
     }
 }
 
+const confirmPayment = async (req, res, next) => {
+    try {
+        const { identification, phone, code } = req.body;
+        isIdentificationValid(identification);
+        isMobilePhoneValid(phone);
+        const client = await Client.findOne({ identification, phone });
+        isCredentialsValid(client);
+        const payment = await Payment.findOne({ clientIdentification: identification, clientPhone: phone, code });
+        if(!payment){
+            throw new AppError('El codigo es invalido, por favor verifica e intenta nuevamente', 400, 400);
+        }
+        if(payment.alreadyPaid) {
+            throw new AppError('Este pago ya ha sido confirmado', 400, 400);
+        }
+        if(client.balance < payment.amountToPay) {
+            throw new AppError('Fondos insuficientes, no se pudo realizar el pago', 400, 400);
+        }
+        client.balance = client.balance - payment.amountToPay;
+        await client.save();
+        payment.alreadyPaid = true;
+        await payment.save();
+        res.send(payment);
+    } catch (e) {
+        next(e);
+    }
+}
+
 module.exports = {
     registerClient,
     addClientBalance,
     getClientBalance,
-    makePayment
+    makePayment,
+    confirmPayment
 }
