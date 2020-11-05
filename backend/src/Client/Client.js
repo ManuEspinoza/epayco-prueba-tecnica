@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const AppError = require('../error/AppError');
 const ClientSchema = new Schema({
-    document: {
+    identification: {
         type: Number,
         required: true,
         unique: true,

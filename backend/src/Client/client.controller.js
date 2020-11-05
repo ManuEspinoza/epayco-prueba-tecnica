@@ -1,27 +1,20 @@
 const Client = require('./Client');
+const Payment = require('../Payment/Payment');
 const AppError = require('../error/AppError');
-const validator = require('validator');
+const sendEmail = require('../helpers/send-email');
+const randomNumber = require('../helpers/random-number');
+const { isBalanceValid, isCredentialsValid, isEmailValid, 
+        isMobilePhoneValid, isIdentificationValid, isNameValid } = require('../helpers/validators');
+
 
 const registerClient = async (req, res, next) => {
     try {
-        const { document, name, email, phone } = req.body;
-        if (document === undefined || name === undefined || email === undefined || phone === undefined) {
-            throw new AppError('Todos los campos son obligatorios', 400, 400);
-        }
-        if (validator.isEmpty(validator.trim(name)) || validator.isEmpty(validator.trim(email)) || 
-        validator.isEmpty(validator.trim(phone))) {
-            throw new AppError('Todos los campos son obligatorios', 400, 400);
-        }
-        if (document <= 0) {
-            throw new AppError('Identificacion invalida', 400, 400);
-        }
-        if (!validator.isMobilePhone(phone)) {
-            throw new AppError('Numero de telefono invalido', 400, 400);
-        }
-        if (!validator.isEmail(email)) {
-            throw new AppError('Correo invalido', 400, 400);
-        }
-        const client = new Client({ document, name, email, phone });
+        const { identification, name, email, phone } = req.body;
+        isIdentificationValid(identification);
+        isNameValid(name);
+        isEmailValid(email);
+        isMobilePhoneValid(phone);
+        const client = new Client({ identification, name, email, phone });
         await client.save();
         res.status(201).send(client);
     } catch (e) {
@@ -31,27 +24,12 @@ const registerClient = async (req, res, next) => {
 
 const addClientBalance = async (req, res, next) => {
     try {
-        const { document, phone, balance } = req.body;
-        if (document === undefined || phone === undefined || balance === undefined) {
-            throw new AppError('Todos los campos son obligatorios', 400, 400);
-        }
-        if (validator.isEmpty(phone)) {
-            throw new AppError('Todos los campos son obligatorios', 400, 400);
-        }
-        if (!validator.isMobilePhone(phone)) {
-            throw new AppError('Numero de telefono invalido', 400, 400);
-        }
-        if (document <= 0) {
-            throw new AppError('Identificacion invalida', 400, 400);
-        }
-        if (balance <= 0) {
-            throw new AppError('El balance no puede ser 0 o un numero negativo', 400, 400);
-        }
-        const client = await Client.findOne({ document, phone });
-        if (!client) {
-            throw new AppError('Credenciales invalidas, por favor verifique e intente nuevamente', 404, 400);
-        }
-
+        const { identification, phone, balance } = req.body;
+        isIdentificationValid(identification);
+        isMobilePhoneValid(phone);
+        isBalanceValid(balance);
+        const client = await Client.findOne({ identification, phone });
+        isCredentialsValid(client);
         client.balance = client.balance + balance;
         await client.save();
         res.status(200).send(client);
@@ -61,11 +39,48 @@ const addClientBalance = async (req, res, next) => {
 }
 
 const getClientBalance = async (req, res, next) => {
-    res.send("obtener fondos");
+    try {
+        const { identification, phone } = req.body;
+        isIdentificationValid(identification);
+        isMobilePhoneValid(phone);
+        const client = await Client.findOne({ identification, phone });
+        isCredentialsValid(client);
+        res.status(200).send({ balance: client.balance });
+    } catch (e) {
+        next(e);
+    }
+}
+
+const makePayment = async (req, res, next) => {
+    try {
+        const { identification, phone, balance } = req.body;
+        isIdentificationValid(identification);
+        isMobilePhoneValid(phone);
+        isBalanceValid(balance);
+        const client = await Client.findOne({ identification, phone });
+        isCredentialsValid(client);
+        if(client.balance < balance) {
+            throw new AppError('Fondos insuficientes, no puede realizar el pago', 400, 400);
+        }
+        let code = randomNumber();
+        let payment = await Payment.findOne({ identification, code });
+        while(payment) {
+            code = randomNumber();
+            payment = await Payment.findOne({ identification, code });
+        }
+        const newPayment = new Payment({ clientIdentification: identification, clientPhone: phone, 
+            code: code, amountToPay: balance });
+        await newPayment.save();
+        sendEmail(client.email, client.name, code);
+        res.send(newPayment);
+    } catch (e) {
+        next(e);
+    }
 }
 
 module.exports = {
     registerClient,
     addClientBalance,
-    getClientBalance
+    getClientBalance,
+    makePayment
 }
