@@ -1,45 +1,17 @@
 import React, { Component } from 'react';
-import Card from '../../hoc/Card/Card';
-import Input from '../../components/Common/Input/Input';
-import Button from '../../components/Common/Button/Button';
-import axios from '../../axios-instance';
+import Card from '../../../hoc/Card/Card';
+import Input from '../../../components/Common/Input/Input';
+import Button from '../../../components/Common/Button/Button';
+import axios from '../../../axios-instance';
 
-class RegisterClient extends Component {
+class GetBalance extends Component {
     state = {
-        registerForm: {
+        getBalanceForm: {
             identification: {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
                     placeholder: 'Ingrese su documento de identificación'
-                },
-                value: '',
-                validation: {
-                    required: true
-                },
-                valid: false,
-                touched: false,
-                errorMessage: 'Campo obligatorio'
-            },
-            name: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    placeholder: 'Ingrese su nombre completo'
-                },
-                value: '',
-                validation: {
-                    required: true
-                },
-                valid: false,
-                touched: false,
-                errorMessage: 'Campo obligatorio'
-            },
-            email: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    placeholder: 'Ingrese su correo'
                 },
                 value: '',
                 validation: {
@@ -57,54 +29,49 @@ class RegisterClient extends Component {
                 },
                 value: '',
                 validation: {
-                    required: true,
-                    minLength: 3
+                    required: true
                 },
                 valid: false,
                 touched: false,
                 errorMessage: 'Campo obligatorio'
             }
         },
-        loading: false,
         isFormValid: false
     }
 
     submitFormHandler = (event) => {
         event.preventDefault();
-        const formData = {};
-        for (let formElementIdentifier in this.state.registerForm) {
-            formData[formElementIdentifier] = this.state.registerForm[formElementIdentifier].value;
+        let formData = {};
+        for (let formElementIdentifier in this.state.getBalanceForm) {
+            formData[formElementIdentifier] = this.state.getBalanceForm[formElementIdentifier].value;
         }
-        axios.post('/register', formData)
+        axios.post('/balance', formData)
             .then(response => {
-                this.setState({ loading: false });
-                alert("Cliente registrado con exito");
+                console.log(response);
+                alert(`Tu saldo es de ${response.data.balance}$`);
                 this.cleanForm();
-                //this.props.history.push('/');
             })
             .catch(error => {
-                this.setState({ loading: false });
-                console.log(error.response);
                 alert(error.response.data.message);
             });
     }
 
     inputChangedHandler = (event, inputIdentifier) => {
-        const updatedRegisterForm = {
-            ...this.state.registerForm
+        const updatedgetBalanceForm = {
+            ...this.state.getBalanceForm
         }
         const updatedFormElement = {
-            ...updatedRegisterForm[inputIdentifier]
+            ...updatedgetBalanceForm[inputIdentifier]
         };
         updatedFormElement.value = event.target.value;
         updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
         updatedFormElement.touched = true;
-        updatedRegisterForm[inputIdentifier] = updatedFormElement;
+        updatedgetBalanceForm[inputIdentifier] = updatedFormElement;
         let formIsValid = true;
-        for (let inputIdentifier in updatedRegisterForm) {
-            formIsValid = updatedRegisterForm[inputIdentifier].valid && formIsValid;
+        for (let inputIdentifier in updatedgetBalanceForm) {
+            formIsValid = updatedgetBalanceForm[inputIdentifier].valid && formIsValid;
         }
-        this.setState({ registerForm: updatedRegisterForm, isFormValid: formIsValid })
+        this.setState({ getBalanceForm: updatedgetBalanceForm, isFormValid: formIsValid })
     }
 
     checkValidity(value, rules) {
@@ -112,30 +79,25 @@ class RegisterClient extends Component {
         if (rules.required) {
             isValid = value.trim() !== '';
         }
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
         return isValid;
     }
 
     cleanForm = () => {
-        const cleanForm = { ...this.state.registerForm };
+        const cleanForm = { ...this.state.getBalanceForm };
         cleanForm.phone.value = '';
         cleanForm.identification.value = '';
-        cleanForm.email.value = '';
-        cleanForm.name.value = '';
         this.setState({
-            registerForm: cleanForm,
+            getBalanceForm: cleanForm,
             isFormValid: false
         })
     }
 
     render() {
         const formElementsArray = [];
-        for (let key in this.state.registerForm) {
+        for (let key in this.state.getBalanceForm) {
             formElementsArray.push({
                 id: key,
-                config: this.state.registerForm[key]
+                config: this.state.getBalanceForm[key]
             });
         }
 
@@ -153,13 +115,13 @@ class RegisterClient extends Component {
                         shouldValidate={formElement.config.validation}
                         changed={(event) => this.inputChangedHandler(event, formElement.id)} />
                 ))}
-                <Button disabled={!this.state.isFormValid}>Registrarse</Button>
+                <Button disabled={!this.state.isFormValid}>Consultar saldo</Button>
             </form>
         );
 
         return (
             <Card>
-                <h4>¡Regístrate!</h4>
+                <h4>Consultar saldo</h4>
                 {form}
             </Card>
         )
@@ -167,4 +129,4 @@ class RegisterClient extends Component {
 }
 
 
-export default RegisterClient;
+export default GetBalance;
