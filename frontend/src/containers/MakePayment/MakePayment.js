@@ -3,6 +3,9 @@ import Card from '../../hoc/Card/Card';
 import Input from '../../components/Common/Input/Input';
 import Button from '../../components/Common/Button/Button';
 import axios from '../../axios-instance';
+import notifyError from '../../components/Common/Notifications/NotifyError/notifyError';
+import { ToastContainer } from 'react-toastify';
+import notifySuccess from '../../components/Common/Notifications/NotifySuccess/notifySuccess';
 
 class MakePayment extends Component {
     state = {
@@ -86,32 +89,33 @@ class MakePayment extends Component {
             formData.phone = this.state.phone;
             formData.identification = this.state.identification;
         }
-        console.log(formData);
         axios.post(url, formData)
             .then(response => {
                 switch (this.state.step) {
                     case 0:
-                        alert("¡Por favor confirma tu pago, te hemos enviado una clave a tu correo!");
+                        notifySuccess(this.message("¡Por favor confirma tu pago, te hemos enviado una clave a tu correo!"));
                         this.setState({ phone: response.data.clientPhone, identification: response.data.clientIdentification });
                         this.cleanForm();
                         this.setState({ step: 1 });
                         break;
                     case 1:
-                        alert("¡Pago confirmado gracias por utilizar la billetera virtual!");
+                        notifySuccess(this.message("¡Pago confirmado gracias por utilizar la billetera virtual!"));
                         this.cleanForm();
                         this.setState({ step: 0 });
                         break;
                     default:
-                        alert("¡Algo salio mal!");
+                        notifyError(this.message("¡Algo salio mal!"));
                         this.cleanForm();
                         this.setState({ step: 0 });
                         break;
                 }
             })
             .catch(error => {
-                alert(error.response.data.message);
+                notifyError(this.message(error.response.data.message));
             });
     }
+
+    message = (message) => (<p style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>{message}</p>);
 
     inputChangedHandler = (event, inputIdentifier) => {
         const updatedmakePaymentForm = {
@@ -188,14 +192,27 @@ class MakePayment extends Component {
                         shouldValidate={formElement.config.validation}
                         changed={(event) => this.inputChangedHandler(event, formElement.id)} />
                 ))}
-                <Button disabled={!this.state.isFormValid}>Realizar pago</Button>
+                <Button disabled={!this.state.isFormValid}>
+                    {this.state.step === 0 ? 'Realizar pago' : 'Confirmar pago'}
+                </Button>
             </form>
         );
 
         return (
             <Card>
-                <h4>¡Realiza un pago!</h4>
+                <h4>{this.state.step === 0 ? '¡Realiza un pago!' : '¡Confirma tu pago!'}</h4>
                 {form}
+                <ToastContainer
+                    position="top-center"
+                    autoClose={8000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
             </Card>
         )
     }

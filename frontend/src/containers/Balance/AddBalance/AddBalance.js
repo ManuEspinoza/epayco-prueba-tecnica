@@ -3,6 +3,9 @@ import Card from '../../../hoc/Card/Card';
 import Input from '../../../components/Common/Input/Input';
 import Button from '../../../components/Common/Button/Button';
 import axios from '../../../axios-instance';
+import notifySuccess from '../../../components/Common/Notifications/NotifySuccess/notifySuccess';
+import notifyError from '../../../components/Common/Notifications/NotifyError/notifyError';
+import { ToastContainer } from 'react-toastify';
 
 class AddBalance extends Component {
     state = {
@@ -60,17 +63,17 @@ class AddBalance extends Component {
             formData[formElementIdentifier] = this.state.addBalanceForm[formElementIdentifier].value;
         }
         formData.balance = parseInt(formData.balance);
-        console.log(formData);
         axios.post('/add-balance', formData)
             .then(response => {
-                console.log(response);
-                alert(`¡Recargaste ${this.state.addBalanceForm.balance.value}$ a tu billetera con éxito!`);
+                notifySuccess(this.message(`¡Recargaste ${this.state.addBalanceForm.balance.value}$ a tu billetera con éxito!`));
                 this.cleanForm();
             })
             .catch(error => {
-                alert(error.response.data.message);
+                notifyError(this.message(error.response.data.message));
             });
     }
+
+    message = (message) => (<p style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>{message}</p>);
 
     inputChangedHandler = (event, inputIdentifier) => {
         const updatedaddBalanceForm = {
@@ -140,6 +143,17 @@ class AddBalance extends Component {
             <Card>
                 <h4>Recargar saldo</h4>
                 {form}
+                <ToastContainer
+                    position="top-center"
+                    autoClose={8000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
             </Card>
         )
     }

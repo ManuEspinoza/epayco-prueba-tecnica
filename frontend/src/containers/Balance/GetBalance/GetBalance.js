@@ -3,6 +3,10 @@ import Card from '../../../hoc/Card/Card';
 import Input from '../../../components/Common/Input/Input';
 import Button from '../../../components/Common/Button/Button';
 import axios from '../../../axios-instance';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import notifySuccess from '../../../components/Common/Notifications/NotifySuccess/notifySuccess';
+import notifyError from '../../../components/Common/Notifications/NotifyError/notifyError';
 
 class GetBalance extends Component {
     state = {
@@ -39,6 +43,8 @@ class GetBalance extends Component {
         isFormValid: false
     }
 
+    message = (message) => (<p style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>{message}</p>);
+
     submitFormHandler = (event) => {
         event.preventDefault();
         let formData = {};
@@ -47,12 +53,12 @@ class GetBalance extends Component {
         }
         axios.post('/balance', formData)
             .then(response => {
-                console.log(response);
-                alert(`Tu saldo es de ${response.data.balance}$`);
+                const message = this.message(`Tienes un saldo de ${response.data.balance}$`);
+                notifySuccess(message);
                 this.cleanForm();
             })
             .catch(error => {
-                alert(error.response.data.message);
+                notifyError(this.message(error.response.data.message));
             });
     }
 
@@ -123,6 +129,17 @@ class GetBalance extends Component {
             <Card>
                 <h4>Consultar saldo</h4>
                 {form}
+                <ToastContainer
+                    position="top-center"
+                    autoClose={8000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
             </Card>
         )
     }
