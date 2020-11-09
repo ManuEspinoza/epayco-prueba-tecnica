@@ -6,7 +6,7 @@ const isIdentificationValid = (identification) => {
         throw new AppError('Todos los campos son obligatorios', 400, 400);
     }
     if (identification <= 0) {
-        throw new AppError('Identificacion invalida', 400, 400);
+        throw new AppError('Identificación invalida', 400, 400);
     }
 }
 
@@ -21,7 +21,7 @@ const isEmailValid = (email) => {
         throw new AppError('Todos los campos son obligatorios', 400, 400);
     }
     if (!validator.isEmail(email)) {
-        throw new AppError('Correo invalido', 400, 400);
+        throw new AppError('Correo inválido', 400, 400);
     }
 }
 
@@ -30,7 +30,7 @@ const isMobilePhoneValid = (phone) => {
         throw new AppError('Todos los campos son obligatorios', 400, 400);
     }
     if (!validator.isMobilePhone(phone)) {
-        throw new AppError('Numero de telefono invalido', 400, 400);
+        throw new AppError('Número de telefono inválido', 400, 400);
     }
 }
 
@@ -39,13 +39,13 @@ const isBalanceValid = (balance) => {
         throw new AppError('Todos los campos son obligatorios', 400, 400);
     }
     if (balance <= 0) {
-        throw new AppError('Balance invalido, por favor ingresa un numero positivo', 400, 400);
+        throw new AppError('Balance inválido, por favor ingresa un número positivo', 400, 400);
     }
 }
 
 const isCredentialsValid = (client) => {
     if (!client) {
-        throw new AppError('Credenciales invalidas, por favor verifique e intente nuevamente', 404, 400);
+        throw new AppError('Credenciales inválidas, por favor verifique e intente nuevamente', 404, 400);
     }
 }
 

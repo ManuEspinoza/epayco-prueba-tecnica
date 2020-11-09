@@ -7,7 +7,7 @@ const logError = (err, req, res, next) => {
 
 const handleError = (err, req, res, next) => {
     if (err instanceof AppError) {
-        return res.status(err.status).send({ error: err.message, code: err.errorCode });
+        return res.status(err.status).send({ message: err.message, code: err.errorCode });
     }
     next(err);
 }

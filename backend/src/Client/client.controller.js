@@ -41,6 +41,7 @@ const addClientBalance = async (req, res, next) => {
 const getClientBalance = async (req, res, next) => {
     try {
         const { identification, phone } = req.body;
+        console.log(identification, phone);
         isIdentificationValid(identification);
         isMobilePhoneValid(phone);
         const client = await Client.findOne({ identification, phone });
