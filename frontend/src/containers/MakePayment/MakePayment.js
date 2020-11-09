@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Card from '../../hoc/Card/Card';
 
 class MakePayment extends Component {
     state = {
@@ -7,9 +8,9 @@ class MakePayment extends Component {
 
     render() {
         return (
-            <div>
-                <p>Realizar Pago</p>
-            </div>
+            <Card>
+                <h4>Realiza un pago</h4>
+            </Card>
         )
     }
 }

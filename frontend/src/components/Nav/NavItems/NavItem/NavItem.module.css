@@ -39,7 +39,7 @@
     .NavItem a:active,
     .NavItem a.active {
         background-color: white;
-        border-bottom: 4px solid #56d0f5;
+        border-bottom: 4px solid orange;
         color: black;
     }
 }
