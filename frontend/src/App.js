@@ -1,19 +1,18 @@
-import classes from './App.module.css';
-import { Route, NavLink } from 'react-router-dom';
+import React from 'react';
+import Layout from './hoc/Layout/Layout';
+import { Route, Switch } from 'react-router-dom';
+import RegisterClient from './containers/RegisterClient/RegisterClient';
+import MakePayment from './containers/MakePayment/MakePayment';
 
 function App() {
   return (
-    <div className={classes.App}>
-      <header>
-        <nav>
-          <ul>
-            <li><NavLink to="/register" exact>Registar cliente</NavLink></li>
-            <li><NavLink to="/payment" exact>Realizar Pago</NavLink></li>
-          </ul>
-        </nav>
-      </header>
-      <Route path="/register" render={() => (<p>Registrar cliente</p>)} />
-      <Route path="/payment" render={() => (<p>Realizar Pago</p>)} />
+    <div>
+      <Layout>
+        <Switch>
+          <Route path="/register" component={RegisterClient} />
+          <Route path="/payment" component={MakePayment} />
+        </Switch>
+      </Layout>
     </div>
   );
 }
