@@ -64,7 +64,7 @@ class AddBalance extends Component {
         axios.post('/add-balance', formData)
             .then(response => {
                 console.log(response);
-                alert(`Recargaste ${this.state.addBalanceForm.balance.value}$ a tu billetera con exito`);
+                alert(`¡Recargaste ${this.state.addBalanceForm.balance.value}$ a tu billetera con éxito!`);
                 this.cleanForm();
             })
             .catch(error => {

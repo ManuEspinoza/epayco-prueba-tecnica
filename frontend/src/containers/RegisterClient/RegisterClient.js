@@ -57,8 +57,7 @@ class RegisterClient extends Component {
                 },
                 value: '',
                 validation: {
-                    required: true,
-                    minLength: 3
+                    required: true
                 },
                 valid: false,
                 touched: false,
@@ -78,9 +77,8 @@ class RegisterClient extends Component {
         axios.post('/register', formData)
             .then(response => {
                 this.setState({ loading: false });
-                alert("Cliente registrado con exito");
+                alert("¡Cliente registrado con éxito!");
                 this.cleanForm();
-                //this.props.history.push('/');
             })
             .catch(error => {
                 this.setState({ loading: false });
@@ -111,9 +109,6 @@ class RegisterClient extends Component {
         let isValid = false;
         if (rules.required) {
             isValid = value.trim() !== '';
-        }
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
         }
         return isValid;
     }
