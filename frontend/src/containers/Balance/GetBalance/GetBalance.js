@@ -127,7 +127,7 @@ class GetBalance extends Component {
 
         return (
             <Card>
-                <h4>Consultar saldo</h4>
+                <h4>Consulta tu saldo</h4>
                 {form}
                 <ToastContainer
                     position="top-center"

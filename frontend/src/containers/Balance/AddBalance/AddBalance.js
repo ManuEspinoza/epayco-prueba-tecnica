@@ -141,7 +141,7 @@ class AddBalance extends Component {
 
         return (
             <Card>
-                <h4>Recargar saldo</h4>
+                <h4>Recarga tu saldo</h4>
                 {form}
                 <ToastContainer
                     position="top-center"
