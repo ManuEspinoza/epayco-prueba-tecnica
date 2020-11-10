@@ -15,7 +15,7 @@ Funcionalidades:
 
 ## Instalación
 
-Debe tener Node y npm instalados
+Debe tener Node y npm instalados. Ejecutar los siguientes comandos y luego dirigirse a http://localhost:3000
 
 ```bash
 cd frontend
