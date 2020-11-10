@@ -1,0 +1,174 @@
+<definitions name = "ClientService"
+targetNamespace = "http://www.examples.com/wsdl/ClientService.wsdl"
+xmlns = "http://schemas.xmlsoap.org/wsdl/"
+xmlns:soap = "http://schemas.xmlsoap.org/wsdl/soap/"
+xmlns:tns = "http://www.examples.com/wsdl/ClientService.wsdl"
+xmlns:xsd = "http://www.w3.org/2001/XMLSchema">
+<message name = "RegisterClientRequest">
+   <part name = "identification" type = "xsd:string"/>
+   <part name = "name" type = "xsd:string"/>
+   <part name = "email" type = "xsd:string"/>
+   <part name = "phone" type = "xsd:string"/>
+</message>
+ 
+<message name = "RegisterClientResponse">
+   <part name = "message" type = "xsd:string"/>
+</message>
+
+<message name = "AddBalanceRequest">
+   <part name = "identification" type = "xsd:string"/>
+   <part name = "phone" type = "xsd:string"/>
+   <part name = "balance" type = "xsd:number"/>
+</message>
+ 
+<message name = "AddBalanceResponse">
+   <part name = "message" type = "xsd:string"/>
+</message>
+
+<message name = "GetBalanceRequest">
+   <part name = "identification" type = "xsd:string"/>
+   <part name = "phone" type = "xsd:string"/>
+</message>
+
+<message name = "GetBalanceResponse">
+   <part name = "message" type = "xsd:string"/>
+</message>
+
+<message name = "MakePaymentRequest">
+   <part name = "identification" type = "xsd:string"/>
+   <part name = "phone" type = "xsd:string"/>
+   <part name = "balance" type = "xsd:number"/>
+</message>
+
+<message name = "MakePaymentResponse">
+   <part name = "email" type = "xsd:string"/>
+   <part name = "name" type = "xsd:string"/>
+   <part name = "phone" type = "xsd:string"/>
+   <part name = "code" type = "xsd:number"/>
+</message>
+
+<message name = "ConfirmPaymentRequest">
+<part name = "phone" type = "xsd:string"/>
+   <part name = "identification" type = "xsd:string"/>
+   <part name = "code" type = "xsd:number"/>
+</message>
+
+<message name = "ConfirmPaymentResponse">
+   <part name = "message" type = "xsd:string"/>
+</message>
+
+<portType name = "Client_PortType">
+   <operation name = "registerClient">
+      <input message = "tns:RegisterClientRequest"/>
+      <output message = "tns:RegisterClientResponse"/>
+   </operation>
+   <operation name = "addBalance">
+      <input message = "tns:AddBalanceRequest"/>
+      <output message = "tns:AddBalanceResponse"/>
+   </operation>
+   <operation name = "getBalance">
+      <input message = "tns:GetBalanceRequest"/>
+      <output message = "tns:GetBalanceResponse"/>
+   </operation>
+   <operation name = "makePayment">
+      <input message = "tns:MakePaymentRequest"/>
+      <output message = "tns:MakePaymentResponse"/>
+   </operation>
+   <operation name = "confirmPayment">
+      <input message = "tns:ConfirmPaymentRequest"/>
+      <output message = "tns:ConfirmPaymentResponse"/>
+   </operation>
+</portType>
+<binding name = "Client_Binding" type = "tns:Client_PortType">
+   <soap:binding style = "rpc"
+      transport = "http://schemas.xmlsoap.org/soap/http"/>
+   <operation name = "registerClient">
+      <soap:operation soapAction = "registerClient"/>
+      <input>
+         <soap:body
+            encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
+            namespace = "urn:examples:Clientservice"
+            use = "encoded"/>
+      </input>
+     
+      <output>
+         <soap:body
+            encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
+            namespace = "urn:examples:Clientservice"
+            use = "encoded"/>
+      </output>
+   </operation>
+   <operation name = "addBalance">
+      <soap:operation soapAction = "addBalance"/>
+      <input>
+         <soap:body
+            encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
+            namespace = "urn:examples:Clientservice"
+            use = "encoded"/>
+      </input>
+     
+      <output>
+         <soap:body
+            encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
+            namespace = "urn:examples:Clientservice"
+            use = "encoded"/>
+      </output>
+   </operation>
+   <operation name = "getBalance">
+      <soap:operation soapAction = "getBalance"/>
+      <input>
+         <soap:body
+            encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
+            namespace = "urn:examples:Clientservice"
+            use = "encoded"/>
+      </input>
+     
+      <output>
+         <soap:body
+            encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
+            namespace = "urn:examples:Clientservice"
+            use = "encoded"/>
+      </output>
+   </operation>
+   <operation name = "makePayment">
+      <soap:operation soapAction = "makePayment"/>
+      <input>
+         <soap:body
+            encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
+            namespace = "urn:examples:Clientservice"
+            use = "encoded"/>
+      </input>
+     
+      <output>
+         <soap:body
+            encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
+            namespace = "urn:examples:Clientservice"
+            use = "encoded"/>
+      </output>
+   </operation>
+   <operation name = "confirmPayment">
+      <soap:operation soapAction = "confirmPayment"/>
+      <input>
+         <soap:body
+            encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
+            namespace = "urn:examples:Clientservice"
+            use = "encoded"/>
+      </input>
+     
+      <output>
+         <soap:body
+            encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/"
+            namespace = "urn:examples:Clientservice"
+            use = "encoded"/>
+      </output>
+   </operation>
+</binding>
+<service name = "Client_Service">
+   <documentation>WSDL File for ClientService</documentation>
+   <port binding = "tns:Client_Binding" name = "Client_Port">
+      <soap:address
+         location = "http://localhost:8001/wsdl" />
+   </port>
+</service>
+</definitions>
+

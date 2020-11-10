@@ -15,7 +15,7 @@ Funcionalidades:
 
 ## Instalación
 
-Debe tener Node y npm instalados. Ejecutar los siguientes comandos y luego dirigirse a http://localhost:3000
+Debe tener Node, npm y mongo instalados. Ejecutar los siguientes comandos y luego dirigirse a http://localhost:3000
 
 ```bash
 cd frontend
@@ -24,6 +24,12 @@ npm start
 ```
 ```bash
 cd backend
+npm install
+npm start
+```
+
+```bash
+cd soap-services
 npm install
 npm start
 ```

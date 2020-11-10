@@ -53,7 +53,7 @@ class GetBalance extends Component {
         }
         axios.post('/balance', formData)
             .then(response => {
-                const message = this.message(`Tienes un saldo de ${response.data.balance}$`);
+                const message = this.message(response.data.message);
                 notifySuccess(message);
                 this.cleanForm();
             })

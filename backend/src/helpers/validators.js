@@ -11,13 +11,13 @@ const isIdentificationValid = (identification) => {
 }
 
 const isNameValid = (name) => {
-    if(name === undefined || validator.isEmpty(validator.trim(name))) {
+    if (name === undefined || validator.isEmpty(validator.trim(name))) {
         throw new AppError('Todos los campos son obligatorios', 400, 400);
     }
 }
 
 const isEmailValid = (email) => {
-    if(email === undefined || validator.isEmpty(validator.trim(email))) {
+    if (email === undefined || validator.isEmpty(validator.trim(email))) {
         throw new AppError('Todos los campos son obligatorios', 400, 400);
     }
     if (!validator.isEmail(email)) {

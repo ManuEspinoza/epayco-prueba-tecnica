@@ -65,7 +65,7 @@ class AddBalance extends Component {
         formData.balance = parseInt(formData.balance);
         axios.post('/add-balance', formData)
             .then(response => {
-                notifySuccess(this.message(`¡Recargaste ${this.state.addBalanceForm.balance.value}$ a tu billetera con éxito!`));
+                notifySuccess(this.message(response.data.message));
                 this.cleanForm();
             })
             .catch(error => {

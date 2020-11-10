@@ -93,13 +93,13 @@ class MakePayment extends Component {
             .then(response => {
                 switch (this.state.step) {
                     case 0:
-                        notifySuccess(this.message("¡Por favor confirma tu pago, te hemos enviado una clave a tu correo!"));
+                        notifySuccess(this.message(response.data.message));
                         this.setState({ phone: response.data.clientPhone, identification: response.data.clientIdentification });
                         this.cleanForm();
                         this.setState({ step: 1 });
                         break;
                     case 1:
-                        notifySuccess(this.message("¡Pago confirmado gracias por utilizar la billetera virtual!"));
+                        notifySuccess(this.message(response.data.message));
                         this.cleanForm();
                         this.setState({ step: 0 });
                         break;

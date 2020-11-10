@@ -18,7 +18,7 @@ const ClientSchema = new Schema({
     phone: {
         type: String,
         required: true,
-        unique: true,  
+        unique: true,
     },
     balance: {
         type: Number,
@@ -28,7 +28,7 @@ const ClientSchema = new Schema({
 
 ClientSchema.post('save', (err, res, next) => {
     if (err.name === 'MongoError' && err.code === 11000) {
-        return next(new AppError('La informacion ingresada ya existe', 400, 401));
+        throw new AppError('La información ingresada ya existe', 400, 401);
     }
     next();
 })

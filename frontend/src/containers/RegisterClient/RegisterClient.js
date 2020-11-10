@@ -80,7 +80,7 @@ class RegisterClient extends Component {
         axios.post('/register', formData)
             .then(response => {
                 this.setState({ loading: false });
-                notifySuccess(this.message("¡Cliente registrado con éxito!"));
+                notifySuccess(this.message(response.data.message));
                 this.cleanForm();
             })
             .catch(error => {
